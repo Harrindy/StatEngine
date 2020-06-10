@@ -1,0 +1,10 @@
+Package: StatEngine
+Type: Package
+Title: An R Package for the UofSC Course STAT 509 "Statistics for Engineers"
+Version: 1.0.0
+Author: Dewei Wang
+Maintainer: Dewei Wang <deweiwang@stat.sc.edu>
+Description: This R package provides tools for methods covered in the course STAT 509 "Statistics for Engineers" at the University of South Carolina
+License: MIT
+Encoding: UTF-8
+LazyData: true

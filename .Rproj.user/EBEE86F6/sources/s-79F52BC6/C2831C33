@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1591797911376.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "C2831C33",
+    "lastKnownWriteTime" : 1590805425,
+    "last_content_update" : 1591797971774,
+    "path" : "~/OneDrive - University of South Carolina/Current Teaching/Wang STAT 509/RPackage/StatEngine/R/Continuous.R",
+    "project_path" : "R/Continuous.R",
+    "properties" : {
+        "cursorPosition" : "13,0",
+        "scrollLine" : "1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
