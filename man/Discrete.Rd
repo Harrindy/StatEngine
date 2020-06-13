@@ -68,14 +68,14 @@ poisson.prob(lambda,L,lb,ub,inclusive=c("none","left","right","both"))
   \item{lb,ub}{lower bound (lb) and upper bound (ub) in a probability statement; lb could be -Inf; ub could be Inf; ub cannot be less than lb}
   \item{inclusive}{"none": lb<X<ub;  "left": lb<=X<ub;  "right": lb<X<=ub;  "both": lb<=X<=ub}
   \item{Range}{contains all possible values of a discrete uniform random variable}
-  \item{p}{parameter p in a Binomial distribution/Geometric distribution/Negtive Binomial distribution}
-  \item{n}{parameter n in a Binomial distribution}
-  \item{r}{parameter r in a negative Binomial distribution}
-  \item{N,K,n}{parameters N, K, and n in a hypergeometric distribution}
-  \item{lambda,L}{parameters lambda and L in a Poisson distribution. Default: L=1}
+  \item{p}{parameter p of a Binomial distribution/Geometric distribution/Negtive Binomial distribution}
+  \item{n}{parameter n of a Binomial distribution}
+  \item{r}{parameter r of a negative Binomial distribution}
+  \item{N,K,n}{parameters N, K, and n of a hypergeometric distribution}
+  \item{lambda,L}{parameters lambda and L of a Poisson distribution. Default: L=1}
 }
 \details{
-Plot the probability mass function (pmf) and the cumulative distribution function (cdf) and calculate probability, mean, variable and standard deviation, and compute probabilities of various discrete distributions (a self-defined discrete distribution, discrete uniform distribution, binomial distribution, geometric distribution, negative binomial distribution, hypergeometric distribution, and Poisson distribution.}
+Plot the probability mass function (pmf) and the cumulative distribution function (cdf) and calculate probability, mean, variable and standard deviation, and compute probabilities of various discrete distributions (a self-defined discrete distribution, discrete uniform distribution, binomial distribution, geometric distribution, negative binomial distribution, hypergeometric distribution, and Poisson distribution).}
 \value{
 \item{discrete.plotpdf}{a figure of the pmf of the user-defined discrete distribution}
 \item{discrete.plotcdf}{a figure of the cdf of the user-defined discrete distribution}
