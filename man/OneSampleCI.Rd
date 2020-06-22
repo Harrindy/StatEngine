@@ -1,4 +1,4 @@
-\name{One-Sample Confidence Intervals}
+\name{One-Sample Inference}
 \alias{Zinterval.data}
 \alias{Zinterval.stat}
 \alias{sample.size.Zinterval}
@@ -16,10 +16,10 @@
 \alias{Predinterval.stat}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-One-Sample Confidence Intervals
+One-Sample Confidence Intervals and Hypothesis Tests
 }
 \description{
-Compute CIs for the population mean, population variance, and population proportaion and PI for a single future observation from a normal distribution.
+Compute confidence intervals and conduct hypothesis tests and on the population mean, population variance, and population proportaion. In addition, it computes prediction interval for a single future observation from a normal distribution.
 }
 \usage{
 #CI for pupulation mean of a normal distribution when the population variance is known:
