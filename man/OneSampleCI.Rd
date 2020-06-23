@@ -1,55 +1,50 @@
-\name{One-Sample Inference}
-\alias{Zinterval.data}
-\alias{Zinterval.stat}
+\name{One-Sample Confidence Intervals}
+\alias{Zinterval}
 \alias{sample.size.Zinterval}
-\alias{Tinterval.data}
-\alias{Tinterval.stat}
-\alias{t.quantile}
-\alias{AZinterval.data}
-\alias{AZinterval.stat}
-\alias{Chi2interval.data}
-\alias{Chi2interval.stat}
-\alias{Chi2.quantile}
+\alias{Tinterval}
+\alias{AZinterval}
+\alias{Chi2interval}
 \alias{Propinterval}
 \alias{sample.size.Propinterval}
-\alias{Predinterval.data}
-\alias{Predinterval.stat}
+\alias{Predinterval}
+\alias{t.quantile}
+\alias{Chi2.quantile}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-One-Sample Confidence Intervals and Hypothesis Tests
+One-Sample Confidence Intervals
 }
 \description{
-Compute confidence intervals and conduct hypothesis tests and on the population mean, population variance, and population proportaion. In addition, it computes prediction interval for a single future observation from a normal distribution.
+Compute confidence intervals on the population mean, population variance, and population proportaion. In addition, it computes prediction interval for a single future observation from a normal distribution.
 }
 \usage{
 #CI for pupulation mean of a normal distribution when the population variance is known:
-Zinterval.data(data,sigma,level)
-Zinterval.data(n,barx,sigma,level)
+Zinterval(level,sigma,data) # if data available
+Zinterval(level,sigma,n,barx) # if stats are provided
 # Choice of sample size for estimating the population mean when error is specified
-sample.size.Zinterval(E,sigma,level)
+sample.size.Zinterval(level,sigma,E)
 
 #CI for pupulation mean when the population variance is unknown and the distribution is normal
 #or when the sample size is smaller than 25:
-Tinterval.data(data,level)
-Tinterval.data(n,barx,s,level)
+Tinterval(level,data) # if data available
+Tinterval(level,n,barx,s) # if stats are provided
 
 #Large-sample CI for pupulation mean:
-AZinterval.data(data,level)
-AZinterval.data(n,barx,s,level)
+AZinterval.data(level,data) # if data available
+AZinterval.data(level,n,barx,s) # if stats are provided
 
 #CI for pupulation variance (or standard deviation) of a normal distribution:
-Chi2interval.data(data,level)
-Chi2interval.data(n,s,level)
+Chi2interval(level,data) # if data available
+Chi2interval(level,n,s) # if stats are provided
 
 #Large-sample CI for a pupulation proportion:
-Propinterval(n,x,level)
+Propinterval(level,n,X)
 # Choice of sample size for estimating a population proportion when error is specified
-sample.size.Propinterval(E,ini.p,level)
-sample.size.Propinterval(E,ini.p=0.5,level) # using the conservative apporach
+sample.size.Propinterval(level,ini.p,E) # using an intial guess
+sample.size.Propinterval(level,ini.p=0.5,E) # using the conservative apporach
 
 # Prediction interval of a single future observation form a normal distribution:
-Predinterval.data(data,level)
-Predinterval.stat(n,barx,s,level)
+Predinterval(level,data) # if data available
+Predinterval(level,n,barx,s) # if stats are provided
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -59,6 +54,7 @@ Predinterval.stat(n,barx,s,level)
   \item{s}{the observed sample standard deviation}
   \item{barx}{the observed sample mean}
   \item{n}{the sample size}
+  \item{X}{number of observations belongs to a class of interest}
   \item{E}{specified error in sample size calculation}
   \item{ini.p}{A initial estimate of the populatin proportion. Default is 0.5 which corresponds to the conservative approach}
   \item{df}{the degrees of freedom of a t or chi.square distribution}
@@ -89,30 +85,43 @@ deweiwang@stat.sc.edu
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-data=c(64.1, 64.7, 64.5, 64.6, 64.5, 64.3, 64.6, 64.8, 64.2, 64.3)
-Zinterval.data(data,sigma=1,level=0.95)
-Zinterval.data(data,sigma=1,level=0.99)
+#Zinterval
+# Useing data, must include the = sign
+x=c(64.1, 64.7, 64.5, 64.6, 64.5, 64.3, 64.6, 64.8, 64.2, 64.3)
+Zinterval(level=0.95,sigma=1,data=x)
+Zinterval(level=0.99,sigma=1,data=x)
 sample.size.Zinterval(E=0.5,sigma=1,level=0.95)
-Zinterval.stat(n=9,barx=98,sigma=2,level=0.95)
+# Useing stats, must include the = sign
+Zinterval(level=0.95,sigma=2,n=9,barx=98)
 
-Tinterval.stat(n=10,barx=1000,s=20,level=0.95)
-Tinterval.stat(n=25,barx=1000,s=20,level=0.95)
-Tinterval.stat(n=10,barx=1000,s=20,level=0.99)
-Tinterval.stat(n=25,barx=1000,s=20,level=0.99)
+#Tinterval
+# Useing stats, must include the = sign
+Tinterval(level=0.95,n=10,barx=1000,s=20)
+Tinterval(level=0.95,n=25,barx=1000,s=20)
+Tinterval(level=0.99,n=10,barx=1000,s=20)
+Tinterval(level=0.99,n=25,barx=1000,s=20)
 
-data=scan("https://raw.githubusercontent.com/Harrindy/StatEngine/master/Data/Mercury.csv")
-AZinterval.data(data,level=0.95)
+#Large-sample Zinterval
+# Useing data, must include the = sign
+x=scan("https://raw.githubusercontent.com/Harrindy/StatEngine/master/Data/Mercury.csv")
+AZinterval(level=0.95,data=x)
 
-Chi2interval.stat(n=20,s=0.01532,level=0.95)
+#Chi.square interval for variance/standard deviation
+# Useing stats, must include the = sign
+Chi2interval(level=0.95,n=20,s=0.01532)
 
-Propinterval(n=85,x=10,level=0.95)
-sample.size.Propinterval(E=0.05,ini.p=0.12,level=0.95)
-sample.size.Propinterval(E=0.05,ini.p=0.5,level=0.95)
+#CIs for a porpulation proportion
+#must include the = sign
+Propinterval(level=0.95,n=85,X=10)
+sample.size.Propinterval(level=0.95,ini.p=0.12,E=0.05)
+sample.size.Propinterval(level=0.95,ini.p=0.5,E=0.05)
 
-data=c(19.8, 10.1, 14.9, 7.5, 15.4, 15.4, 15.4, 18.5, 7.9, 12.7, 11.9, 11.4, 11.4,
+#Prediction interval for normal distribution
+# Useing data, must include the = sign
+x=c(19.8, 10.1, 14.9, 7.5, 15.4, 15.4, 15.4, 18.5, 7.9, 12.7, 11.9, 11.4, 11.4,
 14.1, 17.6, 16.7, 15.8, 19.5, 8.8, 13.6, 11.9, 11.4)
-Tinterval.data(data,level=0.95)
-Predinterval.data(data,level=0.95)
+Tinterval(level=0.95,data=x)
+Predinterval(level=0.95,data=x)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
