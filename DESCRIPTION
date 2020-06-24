@@ -5,6 +5,9 @@ Version: 1.0.0
 Author: Dewei Wang
 Maintainer: Dewei Wang <deweiwang@stat.sc.edu>
 Description: This R package provides tools for methods covered in the course STAT 509 "Statistics for Engineers" at the University of South Carolina
+Depends: 
+  R (>= 3.1.0),
+  car (>= 3.0.0)
 License: MIT
 Encoding: UTF-8
 LazyData: true

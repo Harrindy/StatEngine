@@ -1,5 +1,6 @@
 data.summary=function(x,plot=TRUE)
 {
+  require(car)
   x=as.vector(x)
   na.count=sum(is.na(x))
   if(na.count>0){
@@ -34,8 +35,7 @@ data.summary=function(x,plot=TRUE)
     plot(x,main="Scatterplot of x")
     boxplot(x,main="boxplot of x",ylab="x")
     hist(x)
-    qqnorm(x)
-    qqline(x)
+    qqPlot(x)
     par(mfrow=c(1,1))
   }
 }
