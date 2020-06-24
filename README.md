@@ -7,7 +7,7 @@ You need to install the R package "devtools" first.
 
     install.packages("devtools")
     
-Then run these two lines to install the StatEngin package.
+Then run these two lines to install the StatEngine package.
 
     library(devtools)
     install_github("Harrindy/StatEngine",force=TRUE) 

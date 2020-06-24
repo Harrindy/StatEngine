@@ -17,7 +17,7 @@ Chi2.quantile=function(df,q)
 
 Zinterval=function(level=0.95,sigma,data,n,barx)
 {
-  if(level>=1|level<0){return("the confidence level should be between 0 and 1!")}
+  if(level>=1|level<=0){return("the confidence level should be between 0 and 1!")}
   if(missing(sigma)==TRUE){
     return("Please provide the value of sigma.
            If it is unknown, consider Tinterval")
@@ -27,7 +27,7 @@ Zinterval=function(level=0.95,sigma,data,n,barx)
     barx=mean(data)
   }else if(missing(n)==TRUE | missing(barx)==TRUE)
   {
-    return("please input the sample size/sample mean")
+    return("No data was provided, please input the sample size/sample mean")
   }
   alpha=1-level
   z_a=qnorm(1-alpha/2)
@@ -40,14 +40,14 @@ Zinterval=function(level=0.95,sigma,data,n,barx)
 
 AZinterval=function(level=0.95,data,n,barx,s)
 {
-  if(level>=1|level<0){return("the confidence level should be between 0 and 1!")}
+  if(level>=1|level<=0){return("the confidence level should be between 0 and 1!")}
   if(missing(data)==FALSE){
     n=length(data)
     barx=mean(data)
     s=sd(data)
   }else if(missing(n)==TRUE | missing(barx)==TRUE | missing(s)==TRUE)
   {
-    return("please input the sample size/sample mean/sample standard deviation")
+    return("No data was provided, please input the sample size/sample mean/sample standard deviation")
   }
   alpha=1-level
   z_a=qnorm(1-alpha/2)
@@ -60,14 +60,14 @@ AZinterval=function(level=0.95,data,n,barx,s)
 
 Tinterval=function(level=0.95,data,n,barx,s)
 {
-  if(level>=1|level<0){return("the confidence level should be between 0 and 1!")}
+  if(level>=1|level<=0){return("the confidence level should be between 0 and 1!")}
   if(missing(data)==FALSE){
     n=length(data)
     barx=mean(data)
     s=sd(data)
   }else if(missing(n)==TRUE | missing(barx)==TRUE | missing(s)==TRUE)
   {
-    return("please input the sample size/sample mean/sample standard deviation")
+    return("No data was provided, please input the sample size/sample mean/sample standard deviation")
   }
   alpha=1-level
   t_a=t.quantile(df=n-1,1-alpha/2)
@@ -80,13 +80,13 @@ Tinterval=function(level=0.95,data,n,barx,s)
 
 Chi2interval=function(level=0.95,data,n,s)
 {
-  if(level>=1|level<0){return("the confidence level should be between 0 and 1!")}
+  if(level>=1|level<=0){return("the confidence level should be between 0 and 1!")}
   if(missing(data)==FALSE){
     n=length(data)
     s=sd(data)
   }else if(missing(n)==TRUE | missing(s)==TRUE)
   {
-    return("please input the sample size/sample standard deviation")
+    return("No data was provided, please input the sample size/sample standard deviation")
   }
   alpha=1-level
   s2=s^2
@@ -111,10 +111,10 @@ Chi2interval=function(level=0.95,data,n,s)
 
 Propinterval=function(level=0.95,n,X)
 {
-  if(level>=1|level<0){return("the confidence level should be between 0 and 1!")}
+  if(level>=1|level<=0){return("the confidence level should be between 0 and 1!")}
   if(missing(n)==TRUE | missing(X)==TRUE)
   {
-    return("please input the sample size/the value of x")
+    return("No data was provided, please input the sample size/the value of x")
   }
   p=X/n
   alpha=1-level
@@ -128,14 +128,14 @@ Propinterval=function(level=0.95,n,X)
 
 Predinterval=function(level=0.95,data,n,barx,s)
 {
-  if(level>=1|level<0){return("the confidence level should be between 0 and 1!")}
+  if(level>=1|level<=0){return("the confidence level should be between 0 and 1!")}
   if(missing(data)==FALSE){
     n=length(data)
     barx=mean(data)
     s=sd(data)
   }else if(missing(n)==TRUE | missing(barx)==TRUE | missing(s)==TRUE)
   {
-    return("please input the sample size/sample mean/sample standard deviation")
+    return("No data was provided, please input the sample size/sample mean/sample standard deviation")
   }
   alpha=1-level
   t_a=t.quantile(df=n-1,1-alpha/2)
@@ -149,7 +149,7 @@ Predinterval=function(level=0.95,data,n,barx,s)
 
 sample.size.Zinterval=function(level=0.95,sigma,E)
 {
-  if(level>=1|level<0){return("the confidence level should be between 0 and 1!")}
+  if(level>=1|level<=0){return("the confidence level should be between 0 and 1!")}
   alpha=1-level
   z_a=qnorm(1-alpha/2)
   n=ceiling((z_a*sigma/E)^2)
@@ -159,8 +159,8 @@ sample.size.Zinterval=function(level=0.95,sigma,E)
 
 sample.size.Propinterval=function(level=0.95,ini.p=0.5,E)
 {
-  if(level>=1|level<0){return("the confidence level should be between 0 and 1!")}
-  if(ini.p>=1|level<0){return("the initial estimate should be between 0 and 1!")}
+  if(level>=1|level<=0){return("the confidence level should be between 0 and 1!")}
+  if(ini.p>=1|level<=0){return("the initial estimate should be between 0 and 1!")}
   n=ceiling((qnorm(1-(1-level)/2)/E)^2*ini.p*(1-ini.p))
   cat("In the estimation of p, the samllest sample size to control the margin of error E <=", E, "at",level*100, "% confidence level is", n, "\n")
 }
