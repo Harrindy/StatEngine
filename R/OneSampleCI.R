@@ -15,19 +15,19 @@ Chi2.quantile=function(df,q)
 
 
 
-Zinterval=function(level=0.95,sigma,data,n,barx)
+Zinterval=function(level=0.95,sigma,sample,n,barx)
 {
   if(level>=1|level<=0){return("the confidence level should be between 0 and 1!")}
   if(missing(sigma)==TRUE){
     return("Please provide the value of sigma.
            If it is unknown, consider Tinterval")
   }
-  if(missing(data)==FALSE){
-    n=length(data)
-    barx=mean(data)
+  if(missing(sample)==FALSE){
+    n=length(sample)
+    barx=mean(sample)
   }else if(missing(n)==TRUE | missing(barx)==TRUE)
   {
-    return("No data was provided, please input the sample size/sample mean")
+    return("No sample was provided, please input the sample size/sample mean")
   }
   alpha=1-level
   z_a=qnorm(1-alpha/2)
@@ -38,16 +38,16 @@ Zinterval=function(level=0.95,sigma,data,n,barx)
   cat("A", level*100, "% lower-confidence bound for the population mean is", barx-z_a*sigma/sqrt(n),"\n")
 }
 
-AZinterval=function(level=0.95,data,n,barx,s)
+AZinterval=function(level=0.95,sample,n,barx,s)
 {
   if(level>=1|level<=0){return("the confidence level should be between 0 and 1!")}
-  if(missing(data)==FALSE){
-    n=length(data)
-    barx=mean(data)
-    s=sd(data)
+  if(missing(sample)==FALSE){
+    n=length(sample)
+    barx=mean(sample)
+    s=sd(sample)
   }else if(missing(n)==TRUE | missing(barx)==TRUE | missing(s)==TRUE)
   {
-    return("No data was provided, please input the sample size/sample mean/sample standard deviation")
+    return("No sample was provided, please input the sample size/sample mean/sample standard deviation")
   }
   alpha=1-level
   z_a=qnorm(1-alpha/2)
@@ -58,16 +58,16 @@ AZinterval=function(level=0.95,data,n,barx,s)
   cat("A large-sample lower-confidence bound for the population mean with confidence level of approximately", level*100, "% is", barx-z_a*s/sqrt(n),"\n")
 }
 
-Tinterval=function(level=0.95,data,n,barx,s)
+Tinterval=function(level=0.95,sample,n,barx,s)
 {
   if(level>=1|level<=0){return("the confidence level should be between 0 and 1!")}
-  if(missing(data)==FALSE){
-    n=length(data)
-    barx=mean(data)
-    s=sd(data)
+  if(missing(sample)==FALSE){
+    n=length(sample)
+    barx=mean(sample)
+    s=sd(sample)
   }else if(missing(n)==TRUE | missing(barx)==TRUE | missing(s)==TRUE)
   {
-    return("No data was provided, please input the sample size/sample mean/sample standard deviation")
+    return("No sample was provided, please input the sample size/sample mean/sample standard deviation")
   }
   alpha=1-level
   t_a=t.quantile(df=n-1,1-alpha/2)
@@ -78,15 +78,15 @@ Tinterval=function(level=0.95,data,n,barx,s)
   cat("A", level*100, "% lower-confidence bound for the population mean is", barx-t_a*s/sqrt(n),"\n")
 }
 
-Chi2interval=function(level=0.95,data,n,s)
+Chi2interval=function(level=0.95,sample,n,s)
 {
   if(level>=1|level<=0){return("the confidence level should be between 0 and 1!")}
-  if(missing(data)==FALSE){
-    n=length(data)
-    s=sd(data)
+  if(missing(sample)==FALSE){
+    n=length(sample)
+    s=sd(sample)
   }else if(missing(n)==TRUE | missing(s)==TRUE)
   {
-    return("No data was provided, please input the sample size/sample standard deviation")
+    return("No sample was provided, please input the sample size/sample standard deviation")
   }
   alpha=1-level
   s2=s^2
@@ -114,8 +114,9 @@ Propinterval=function(level=0.95,n,X)
   if(level>=1|level<=0){return("the confidence level should be between 0 and 1!")}
   if(missing(n)==TRUE | missing(X)==TRUE)
   {
-    return("No data was provided, please input the sample size/the value of x")
+    return("No sample was provided, please input the sample size/the value of X")
   }
+  if(X<5 | n-X<5){cat("Warning: Because either X or n-X is less than 5. The CLT might not work well, and the following results should be used with caution ")}
   p=X/n
   alpha=1-level
   z_a=qnorm(1-alpha/2)
@@ -126,16 +127,16 @@ Propinterval=function(level=0.95,n,X)
   cat("A large-sample lower-confidence bound for the population proportion with confidence level of approximately", level*100, "% is", p-z_a*sqrt(p*(1-p)/n),"\n")
 }
 
-Predinterval=function(level=0.95,data,n,barx,s)
+Predinterval=function(level=0.95,sample,n,barx,s)
 {
   if(level>=1|level<=0){return("the confidence level should be between 0 and 1!")}
-  if(missing(data)==FALSE){
-    n=length(data)
-    barx=mean(data)
-    s=sd(data)
+  if(missing(sample)==FALSE){
+    n=length(sample)
+    barx=mean(sample)
+    s=sd(sample)
   }else if(missing(n)==TRUE | missing(barx)==TRUE | missing(s)==TRUE)
   {
-    return("No data was provided, please input the sample size/sample mean/sample standard deviation")
+    return("No sample was provided, please input the sample size/sample mean/sample standard deviation")
   }
   alpha=1-level
   t_a=t.quantile(df=n-1,1-alpha/2)

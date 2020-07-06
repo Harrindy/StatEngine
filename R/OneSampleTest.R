@@ -1,5 +1,5 @@
 Ztest=function(mu0,H1="two",alpha=0.05,sigma,
-               data,n,barx)
+               sample,n,barx)
 {
   ########################################
   # Check input
@@ -8,9 +8,9 @@ Ztest=function(mu0,H1="two",alpha=0.05,sigma,
   if(missing(sigma)==TRUE){
     return("Please provide the value of sigma. If it is unknown, consider Ttest")
   }
-  if(missing(data)==FALSE){
-    n=length(data)
-    barx=mean(data)
+  if(missing(sample)==FALSE){
+    n=length(sample)
+    barx=mean(sample)
   }else if(missing(n)==TRUE | missing(barx)==TRUE)
   {
     return("please input the sample size/sample mean")
@@ -21,24 +21,24 @@ Ztest=function(mu0,H1="two",alpha=0.05,sigma,
   if(H1=="two")
   {
   z_a=qnorm(1-alpha/2)
-  cat("H1 is two-sided: mu does not equal to mu0=",mu0, ". The results are:","\n")
+  cat("H1 is two-tailed: mu does not equal to mu0=",mu0, ". The results are:","\n")
   if(abs(z0)<=z_a){
     cat("\n")
     cat("1. Test statistic z0 is", z0,", z_(alpha/2) is", z_a,
-        ", Because |z0|<=z_(alpha/2), we fail to reject H0 at significance level", alpha,"\n")
+        ". Because |z0|<=z_(alpha/2), we fail to reject H0 at significance level", alpha,"\n")
   }else{
     cat("\n")
     cat("1. Test statistic z0 is", z0,", z_(alpha/2) is", z_a,
-        ", Because |z0|>z_(alpha/2), we reject H0 at significance level", alpha,"\n")
+        ". Because |z0|>z_(alpha/2), we reject H0 at significance level", alpha,"\n")
   }
   Ln=barx-z_a*sigma/sqrt(n)
   Un=barx+z_a*sigma/sqrt(n)
   if(Ln<=mu0 & mu0<=Un){
     cat("\n")
-    cat("2. A", (1-alpha)*100, "% two-sided confidence interval for the population mean is [", Ln,",",Un,"]","which contains the hypothesized value mu0=", mu0, ", so we fail to reject H0 at significance level", alpha,"\n")
+    cat("2. A", (1-alpha)*100, "% two-tailed confidence interval for the population mean is [", Ln,",",Un,"]","which contains the hypothesized value mu0=", mu0, ", so we fail to reject H0 at significance level", alpha,"\n")
   }else{
     cat("\n")
-    cat("2. A", (1-alpha)*100, "% two-sided confidence interval for the population mean is [", Ln,",",Un,"]","which does not contain the hypothesized value mu0=", mu0, ", we reject H0 at significance level", alpha,"\n")
+    cat("2. A", (1-alpha)*100, "% two-tailed confidence interval for the population mean is [", Ln,",",Un,"]","which does not contain the hypothesized value mu0=", mu0, ", we reject H0 at significance level", alpha,"\n")
   }
   pv=2*(1-pnorm(abs(z0)))
   if(pv< alpha){
@@ -51,15 +51,15 @@ Ztest=function(mu0,H1="two",alpha=0.05,sigma,
   }else if(H1=="left")
   {
     z_a=qnorm(1-alpha)
-    cat("H1 is one-sided: mu is less than mu0=",mu0, ". The results are:","\n")
+    cat("H1 is left-tailed: mu is less than mu0=",mu0, ". The results are:","\n")
     if(z0>= -z_a){
       cat("\n")
       cat("1. Test statistic z0 is", z0,", z_alpha is", z_a,
-          ", Because -z_alpha<=z0, we fail to reject H0 at significance level", alpha,"\n")
+          ". Because -z_alpha<=z0, we fail to reject H0 at significance level", alpha,"\n")
     }else{
       cat("\n")
       cat("1. Test statistic z0 is", z0,", z_alpha is", z_a,
-          ", Because z0<-z_alpha, we reject H0 at significance level", alpha,"\n")
+          ". Because z0<-z_alpha, we reject H0 at significance level", alpha,"\n")
     }
     Un=barx+z_a*sigma/sqrt(n)
     if(mu0<=Un){
@@ -80,15 +80,15 @@ Ztest=function(mu0,H1="two",alpha=0.05,sigma,
   }else if(H1=="right")
   {
     z_a=qnorm(1-alpha)
-    cat("H1 is one-sided: mu is more than mu0=",mu0, ". The results are:","\n")
+    cat("H1 is right-tailed: mu is more than mu0=",mu0, ". The results are:","\n")
     if(z0<= z_a){
       cat("\n")
       cat("1. Test statistic z0 is", z0,", z_alpha is", z_a,
-          ", Because z0<= z_alpha, we fail to reject H0 at significance level", alpha,"\n")
+          ". Because z0<= z_alpha, we fail to reject H0 at significance level", alpha,"\n")
     }else{
       cat("\n")
       cat("1. Test statistic z0 is", z0,", z_alpha is", z_a,
-          ", Because z0>z_alpha, we reject H0 at significance level", alpha,"\n")
+          ". Because z0>z_alpha, we reject H0 at significance level", alpha,"\n")
     }
     Ln=barx-z_a*sigma/sqrt(n)
     if(mu0>=Ln){
@@ -120,11 +120,16 @@ Ztest.power=function(H1="two",sigma,alpha=0.05,n,delta)
   if(missing(sigma)==TRUE){
     return("Please provide the value of sigma. If it is unknown, consider Ttest")
   }
+  if(missing(delta)==FALSE){
+    if(H1=="two" & delta==0){return("H1 does not holds when delta=0")}
+    if(H1=="left" & delta>=0){return("H1 only holds when delta<0")}
+    if(H1=="right" & delta<=0){return("H1 only holds when delta>0")}
+  }
   ########################################
   if(H1=="two")
   {
     z_a=qnorm(1-alpha/2)
-    cat("H1 is two-sided", "\n")
+    cat("H1 is two-tailed", "\n")
     if(missing(delta)!=TRUE){
       cat("\n")
       cat("The probability of the Type II error of this test at delta=mu1-mu0=",delta,"is",
@@ -136,7 +141,7 @@ Ztest.power=function(H1="two",sigma,alpha=0.05,n,delta)
     power=function(delta){1-normal.prob(0,1,-z_a-delta*sqrt(n)/sigma,z_a-delta*sqrt(n)/sigma)}
     delta=seq((-4-z_a)*sigma/sqrt(n),(4+z_a)*sigma/sqrt(n),length=100)
     pp=sapply(delta,power)
-    plot(delta,pp,type="l",ylim=c(0,1),xlab=expression(delta==mu[1]-mu[0]),ylab="Power",main=paste("Power curve of the two-sided Z test at n=",ceiling(n),sep=""))
+    plot(delta,pp,type="l",ylim=c(0,1),xlab=expression(delta==mu[1]-mu[0]),ylab="Power",main=paste("Power curve of the two-tailed Z test at n=",ceiling(n),sep=""))
     lines(delta*2,rep(alpha,100),lty=3)
   }else if(H1=="left")
   {
@@ -188,6 +193,7 @@ sample.size.Ztest=function(H1="two",alpha,beta,sigma,delta)
     return("Please provide the value of delta")
   }
   if(delta==0){return("delta should not be 0")}
+  if(H1=="two" & delta==0){return("H1 does not hold when delta=0")}
   if(H1=="left" & delta>=0){return("H1 only holds when delta<0")}
   if(H1=="right" & delta<=0){return("H1 only holds when delta>0")}
   if(H1=="two"){
@@ -197,7 +203,7 @@ sample.size.Ztest=function(H1="two",alpha,beta,sigma,delta)
     }
     targ=function(n){return(pp(n)-beta)}
     n=ceiling(uniroot(targ,c(1,4*ceiling(((4-z_a)*sigma/delta)^2)))$root)
-    cat("At significance level alpha=",alpha,", we need at least n=",n,"to achieve a power >=",1-beta, "of this test at delta=",delta,"\n")
+    cat("At significance level alpha=",alpha,", we need at least n=",n,"to achieve a power >=",1-beta, "of this test at delta=mu1-mu0=",delta,"\n")
     cat("When n=",n-1,", the power is", 1-pp(n-1),"\n")
     cat("When n=",n,", the power is", 1-pp(n),"\n")
     cat("When n=",n+1,", the power is", 1-pp(n+1),"\n")
@@ -208,7 +214,7 @@ sample.size.Ztest=function(H1="two",alpha,beta,sigma,delta)
       normal.prob(0,1,-z_a-delta*sqrt(n)/sigma,Inf)
     }
     n=ceiling(((z_a-z_beta)*sigma/delta)^2)
-    cat("At significance level alpha=",alpha,", we need at least n=",n,"to achieve a power >=",1-beta, "of this test at delta=",delta,"\n")
+    cat("At significance level alpha=",alpha,", we need at least n=",n,"to achieve a power >=",1-beta, "of this test at delta=mu1-mu0=",delta,"\n")
     cat("When n=",n-1,", the power is", 1-pp(n-1),"\n")
     cat("When n=",n,", the power is", 1-pp(n),"\n")
     cat("When n=",n+1,", the power is", 1-pp(n+1),"\n")
@@ -219,7 +225,7 @@ sample.size.Ztest=function(H1="two",alpha,beta,sigma,delta)
       normal.prob(0,1,-Inf,z_a-delta*sqrt(n)/sigma)
     }
     n=ceiling(((-z_a-z_beta)*sigma/delta)^2)
-    cat("At significance level alpha=",alpha,", we need at least n=",n,"to achieve a power >=",1-beta, "of this test at delta=",delta,"\n")
+    cat("At significance level alpha=",alpha,", we need at least n=",n,"to achieve a power >=",1-beta, "of this test at delta=mu1-mu0=",delta,"\n")
     cat("When n=",n-1,", the power is", 1-pp(n-1),"\n")
     cat("When n=",n,", the power is", 1-pp(n),"\n")
     cat("When n=",n+1,", the power is", 1-pp(n+1),"\n")
@@ -231,44 +237,44 @@ sample.size.Ztest=function(H1="two",alpha,beta,sigma,delta)
 
 
 Ttest=function(mu0,H1="two",alpha=0.05,
-               data,n,barx,s)
+               sample,n,barx,s)
 {
   ########################################
   # Check input
   if(missing(mu0)==TRUE){return("Please provide the hypothesized value mu0 in the null hypothesis H0")}
   if(alpha>=1|alpha<=0){return("the significance level alpha should be between 0 and 1!")}
-  if(missing(data)==FALSE){
-    n=length(data)
-    barx=mean(data)
-    s=sd(data)
+  if(missing(sample)==FALSE){
+    n=length(sample)
+    barx=mean(sample)
+    s=sd(sample)
   }else if(missing(n)==TRUE | missing(barx)==TRUE)
   {
-    return("please input the sample size/sample mean")
+    return("please input the sample size/sample mean/sample standard deviation")
   }
   ########################################
-  cat("The sample mean is", barx,"sample standard deviation is", s,", and sample size is", n,"\n","\n")
+  cat("df=",n-1,", the sample mean is", barx,"sample standard deviation is", s,", and sample size is", n,"\n","\n")
   t0=(barx-mu0)/(s/sqrt(n))
   if(H1=="two")
   {
     t_a=t.quantile(n-1,1-alpha/2)
-    cat("H1 is two-sided: mu does not equal to mu0=",mu0, ". The results are:","\n")
+    cat("H1 is two-tailed: mu does not equal to mu0=",mu0, ". The results are:","\n")
     if(abs(t0)<= t_a){
       cat("\n")
       cat("1. Test statistic t0 is", t0,", t_(n-1,alpha/2) is", t_a,
-          ", Because |t0|<=t_(n-1,alpha/2), we fail to reject H0 at significance level", alpha,"\n")
+          ". Because |t0|<=t_(n-1,alpha/2), we fail to reject H0 at significance level", alpha,"\n")
     }else{
       cat("\n")
       cat("1. Test statistic t0 is", t0,", t_(n-1,alpha/2) is", t_a,
-          ", Because |t0|>t_(n-1,alpha/2), we reject H0 at significance level", alpha,"\n")
+          ". Because |t0|>t_(n-1,alpha/2), we reject H0 at significance level", alpha,"\n")
     }
     Ln=barx-t_a*s/sqrt(n)
     Un=barx+t_a*s/sqrt(n)
     if(Ln<=mu0 & mu0<=Un){
       cat("\n")
-      cat("2. A", (1-alpha)*100, "% two-sided confidence interval for the population mean is [", Ln,",",Un,"]","which contains the hypothesized value mu0=", mu0, ", so we fail to reject H0 at significance level", alpha,"\n")
+      cat("2. A", (1-alpha)*100, "% two-tailed confidence interval for the population mean is [", Ln,",",Un,"]","which contains the hypothesized value mu0=", mu0, ", so we fail to reject H0 at significance level", alpha,"\n")
     }else{
       cat("\n")
-      cat("2. A", (1-alpha)*100, "% two-sided confidence interval for the population mean is [", Ln,",",Un,"]","which does not contain the hypothesized value mu0=", mu0, ", we reject H0 at significance level", alpha,"\n")
+      cat("2. A", (1-alpha)*100, "% two-tailed confidence interval for the population mean is [", Ln,",",Un,"]","which does not contain the hypothesized value mu0=", mu0, ", we reject H0 at significance level", alpha,"\n")
     }
     pv=2*(1-pt(abs(t0),df=n-1))
     if(pv< alpha){
@@ -281,15 +287,15 @@ Ttest=function(mu0,H1="two",alpha=0.05,
   }else if(H1=="left")
   {
     t_a=t.quantile(n-1,1-alpha)
-    cat("H1 is one-sided: mu is less than mu0=",mu0, ". The results are:","\n")
+    cat("H1 is left-tailed: mu is less than mu0=",mu0, ". The results are:","\n")
     if(t0>= -t_a){
       cat("\n")
       cat("1. Test statistic t0 is", t0,", t_(n-1,alpha) is", t_a,
-          ", Because -t_(n-1,alpha)<=t0, we fail to reject H0 at significance level", alpha,"\n")
+          ". Because -t_(n-1,alpha)<=t0, we fail to reject H0 at significance level", alpha,"\n")
     }else{
       cat("\n")
       cat("1. Test statistic t0 is", t0,", t_(n-1,alpha) is", t_a,
-          ", Because t0<-t_(n-1,alpha), we reject H0 at significance level", alpha,"\n")
+          ". Because t0<-t_(n-1,alpha), we reject H0 at significance level", alpha,"\n")
     }
     Un=barx+t_a*s/sqrt(n)
     if(mu0<=Un){
@@ -310,15 +316,15 @@ Ttest=function(mu0,H1="two",alpha=0.05,
   }else if(H1=="right")
   {
     t_a=t.quantile(n-1,1-alpha)
-    cat("H1 is one-sided: mu is more than mu0=",mu0, ". The results are:","\n")
+    cat("H1 is right-tailed: mu is more than mu0=",mu0, ". The results are:","\n")
     if(t0<= t_a){
       cat("\n")
       cat("1. Test statistic t0 is", t0,", t_(n-1,alpha) is", t_a,
-          ", Because t0<= t_(n-1,alpha), we fail to reject H0 at significance level", alpha,"\n")
+          ". Because t0<= t_(n-1,alpha), we fail to reject H0 at significance level", alpha,"\n")
     }else{
       cat("\n")
       cat("1. Test statistic t0 is", t0,", t_(n-1,alpha) is", t_a,
-          ", Because t0>t_(n-1,alpha), we reject H0 at significance level", alpha,"\n")
+          ". Because t0>t_(n-1,alpha), we reject H0 at significance level", alpha,"\n")
     }
     Ln=barx-t_a*s/sqrt(n)
     if(mu0>=Ln){
@@ -351,13 +357,18 @@ Ttest.power=function(H1="two",est.sigma,alpha=0.05,n,delta)
   if(missing(est.sigma)==TRUE){
     return("Please provide an estimate of sigma.")
   }
+  if(missing(delta)==FALSE){
+    if(H1=="two" & delta==0){return("H1 does not holds when delta=0")}
+    if(H1=="left" & delta>=0){return("H1 only holds when delta<0")}
+    if(H1=="right" & delta<=0){return("H1 only holds when delta>0")}
+  }
   ########################################
   if(H1=="two")
   {
     t_a=t.quantile(n-1,1-alpha/2)
-    beta=pt(t_a,df=n-1,ncp=delta*sqrt(n)/est.sigma)-pt(-t_a,df=n-1,ncp=delta*sqrt(n)/est.sigma)
-    cat("H1 is two-sided", "\n")
+    cat("H1 is two-tailed", "\n")
     if(missing(delta)!=TRUE){
+      beta=pt(t_a,df=n-1,ncp=delta*sqrt(n)/est.sigma)-pt(-t_a,df=n-1,ncp=delta*sqrt(n)/est.sigma)
       cat("\n")
       cat("The probability of the Type II error of this test at delta=mu1-mu0=",delta,"is",
           beta, "and the associated power is",
@@ -376,15 +387,15 @@ Ttest.power=function(H1="two",est.sigma,alpha=0.05,n,delta)
     a=uniroot(targ,c(0,100))$root
     delta=seq(0,a,length=100)
     pp=sapply(delta,power)
-    plot(delta,pp,type="l",ylim=c(0,1),xlim=c(-a,a),xlab=expression(delta==mu[1]-mu[0]),ylab="Power",main=paste("Power curve of the two-sided T test at n=",ceiling(n),sep=""))
+    plot(delta,pp,type="l",ylim=c(0,1),xlim=c(-a,a),xlab=expression(delta==mu[1]-mu[0]),ylab="Power",main=paste("Power curve of the two-tailed T test at n=",ceiling(n),sep=""))
     lines(-delta,pp)
     lines(seq(-2*a,2*a,length=100),rep(alpha,100),lty=3)
   }else if(H1=="left")
   {
     t_a=t.quantile(n-1,1-alpha)
     cat("H1 is left-tailed (<)","\n")
-    beta=1-pt(-t_a,df=n-1,ncp=delta*sqrt(n)/est.sigma)
     if(missing(delta)!=TRUE){
+      beta=1-pt(-t_a,df=n-1,ncp=delta*sqrt(n)/est.sigma)
       cat("\n")
       cat("The probability of the Type II error of this test at delta=mu1-mu0=",delta,"is",
           beta, "and the associated power is",
@@ -405,9 +416,9 @@ Ttest.power=function(H1="two",est.sigma,alpha=0.05,n,delta)
   }else if(H1=="right")
   {
     t_a=t.quantile(n-1,1-alpha)
-    cat("H1 is left-tailed (<)","\n")
-    beta=pt(t_a,df=n-1,ncp=delta*sqrt(n)/est.sigma)
+    cat("H1 is right-tailed (>)","\n")
     if(missing(delta)!=TRUE){
+      beta=pt(t_a,df=n-1,ncp=delta*sqrt(n)/est.sigma)
       cat("\n")
       cat("The probability of the Type II error of this test at delta=mu1-mu0=",delta,"is",
           beta, "and the associated power is",
@@ -452,7 +463,7 @@ sample.size.Ttest=function(H1="two",est.sigma,beta,delta,alpha=0.05)
     targ=function(n){return(pp(n)-beta)}
     z_a=normal.quantile(0,1,alpha/2)
     n=ceiling(uniroot(targ, c(2,4*ceiling(((4-z_a)*est.sigma/delta)^2)) )$root)
-    cat("At significance level alpha=",alpha,", we need at least n=",n,"to achieve a power >=",1-beta, "of this test at delta=",delta,"\n")
+    cat("At significance level alpha=",alpha,", we need at least n=",n,"to achieve a power >=",1-beta, "of this test at delta=mu1-mu0=",delta,"\n")
     cat("When n=",n-1,", the power is", 1-pp(n-1),"\n")
     cat("When n=",n,", the power is", 1-pp(n),"\n")
     cat("When n=",n+1,", the power is", 1-pp(n+1),"\n")
@@ -464,7 +475,7 @@ sample.size.Ttest=function(H1="two",est.sigma,beta,delta,alpha=0.05)
     z_a=normal.quantile(0,1,alpha/2)
     targ=function(n){return(pp(n)-beta)}
     n=ceiling(uniroot(targ, c(2,4*ceiling(((4-z_a)*est.sigma/delta)^2)) )$root)
-    cat("At significance level alpha=",alpha,", we need at least n=",n,"to achieve a power >=",1-beta, "of this test at delta=",delta,"\n")
+    cat("At significance level alpha=",alpha,", we need at least n=",n,"to achieve a power >=",1-beta, "of this test at delta=mu1-mu0=",delta,"\n")
     cat("When n=",n-1,", the power is", 1-pp(n-1),"\n")
     cat("When n=",n,", the power is", 1-pp(n),"\n")
     cat("When n=",n+1,", the power is", 1-pp(n+1),"\n")
@@ -475,7 +486,593 @@ sample.size.Ttest=function(H1="two",est.sigma,beta,delta,alpha=0.05)
     }
     targ=function(n){return(pp(n)-beta)}
     n=ceiling(uniroot(targ, c(2,4*ceiling(((4-z_a)*est.sigma/delta)^2)) )$root)
-    cat("At significance level alpha=",alpha,", we need at least n=",n,"to achieve a power >=",1-beta, "of this test at delta=",delta,"\n")
+    cat("At significance level alpha=",alpha,", we need at least n=",n,"to achieve a power >=",1-beta, "of this test at delta=mu1-mu0=",delta,"\n")
+    cat("When n=",n-1,", the power is", 1-pp(n-1),"\n")
+    cat("When n=",n,", the power is", 1-pp(n),"\n")
+    cat("When n=",n+1,", the power is", 1-pp(n+1),"\n")
+  }else{
+    return("H1 should be two, left, or right.")
+  }
+}
+
+
+
+Chi2test=function(sigma0,H1="two",alpha=0.05,
+                  sample,n,s)
+{
+  ########################################
+  # Check input
+  if(missing(sigma0)==TRUE){return("Please provide the hypothesized standard deviation sigma0 in the null hypothesis H0")}
+  if(sigma0<=0){return("The hypothesized standard deviation should be positive")}
+  if(alpha>=1|alpha<=0){return("the significance level alpha should be between 0 and 1!")}
+  if(missing(sample)==FALSE){
+    n=length(sample)
+    s=sd(sample)
+  }else if(missing(n)==TRUE | missing(s)==TRUE)
+  {
+    return("please input the sample size/sample standard deviation")
+  }
+  ########################################
+  cat("df=",n-1,", sample variance is",s^2,", sample standard deviation is", s,", and sample size is", n,"\n","\n")
+  x02=(n-1)*s^2/sigma0^2
+  if(H1=="two")
+  {
+    t_a1=Chi2.quantile(n-1,1-alpha/2)
+    t_a0=Chi2.quantile(n-1,alpha/2)
+    cat("H1 is two-tailed: sigma^2 does not equal to sigma0^2=", sigma0^2, ". The results are:","\n")
+    if(x02<= t_a1 & x02>=t_a0){
+      cat("\n")
+      cat("1. Test statistic x02 is", x02,", Chi2_(n-1,1-alpha/2) is", t_a0, "and Chi2_(n-1,alpha/2) is", t_a1,
+          ". Because Chi2_(n-1,1-alpha/2)<=x02<=Chi2_(n-1,alpha/2), we fail to reject H0 at significance level", alpha,"\n")
+    }else{
+      cat("\n")
+      cat("1. Test statistic x02 is", x02,", Chi2_(n-1,1-alpha/2) is", t_a0, "and Chi2_(n-1,alpha/2) is", t_a1,
+          ". Because Chi2_(n-1,1-alpha/2)<=x02<=Chi2_(n-1,alpha/2) does not hold, we reject H0 at significance level", alpha,"\n")
+    }
+    Ln=(n-1)*s^2/t_a1
+    Un=(n-1)*s^2/t_a0
+    if(Ln<=sigma0^2 & sigma0^2<=Un){
+      cat("\n")
+      cat("2. A", (1-alpha)*100, "% two-tailed confidence interval for the population variance is [", Ln,",",Un,"]","which contains the hypothesized value sigma0^2=", sigma0^2, ", so we fail to reject H0 at significance level", alpha,"\n")
+    }else{
+      cat("\n")
+      cat("2. A", (1-alpha)*100, "% two-tailed confidence interval for the population variance is [", Ln,",",Un,"]","which does not contain the hypothesized value sigma0^2=", sigma0^2, ", we reject H0 at significance level", alpha,"\n")
+    }
+    if(x02>=Chi2.quantile(n-1,.5)){pv=2*(1-pchisq(x02,df=n-1))}else{pv=2*(pchisq(x02,df=n-1))}
+    if(pv< alpha){
+      cat("\n")
+      cat("3. The P-value is", pv ,"which is smaller than alpha=",alpha,", so we reject H0 at significance level", alpha,"\n")
+    }else{
+      cat("\n")
+      cat("3. The P-value is", pv ,"which is not smaller than alpha=",alpha,", so we fail to reject H0 at significance level", alpha,"\n")
+    }
+  }else if(H1=="left")
+  {
+    t_a=Chi2.quantile(n-1,alpha)
+    cat("H1 is left-tailed: sigma^2 is less than sigma0^2=", sigma0^2, ". The results are:","\n")
+    if(x02>= t_a){
+      cat("\n")
+      cat("1. Test statistic x02 is", x02,", Chi2_(n-1,1-alpha) is", t_a,
+          ", Because Chi2_(n-1,1-alpha)<=x02, we fail to reject H0 at significance level", alpha,"\n")
+    }else{
+      cat("\n")
+      cat("1. Test statistic x02 is", x02,", Chi2_(n-1,1-alpha) is", t_a,
+          ", Because x02<Chi2_(n-1,1-alpha), we reject H0 at significance level", alpha,"\n")
+    }
+    Un=(n-1)*s^2/t_a
+    if(sigma0^2<=Un){
+      cat("\n")
+      cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population variance is (", -Inf,",",Un,"]","which contains the hypothesized value sigma0^2=", sigma0^2, ", so we fail to reject H0 at significance level", alpha,"\n")
+    }else{
+      cat("\n")
+      cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population variance is (", -Inf,",",Un,"]","which does not contain the hypothesized value sigma0^2=", sigma0^2, ", we reject H0 at significance level", alpha,"\n")
+    }
+    pv=pchisq(x02,df=n-1)
+    if(pv< alpha){
+      cat("\n")
+      cat("3. The P-value is", pv ,"which is smaller than alpha=",alpha,", so we reject H0 at significance level", alpha,"\n")
+    }else{
+      cat("\n")
+      cat("3. The P-value is", pv ,"which is not smaller than alpha=",alpha,", so we fail to reject H0 at significance level", alpha,"\n")
+    }
+  }else if(H1=="right")
+  {
+    t_a=Chi2.quantile(n-1,1-alpha)
+    cat("H1 is right-tailed: sigma^2 is more than sigma0^2=",sigma0^2, ". The results are:","\n")
+    if(x02<= t_a){
+      cat("\n")
+      cat("1. Test statistic x02 is", x02,", Chi2_(n-1,alpha) is", t_a,
+          ", Because x02<= Chi2_(n-1,alpha), we fail to reject H0 at significance level", alpha,"\n")
+    }else{
+      cat("\n")
+      cat("1. Test statistic x02 is", x02,", Chi2_(n-1,alpha) is", t_a,
+          ", Because x02> Chi2_(n-1,alpha), we reject H0 at significance level", alpha,"\n")
+    }
+    Ln=(n-1)*s^2/t_a
+    if(sigma0^2>=Ln){
+      cat("\n")
+      cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population variance is [", Ln,",",Inf,")","which contains the hypothesized value sigma0^2=", sigma0^2, ", so we fail to reject H0 at significance level", alpha,"\n")
+    }else{
+      cat("\n")
+      cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population variance is [", Ln,",",Inf,")","which does not contain the hypothesized value sigma0^2=", sigma0^2, ", we reject H0 at significance level", alpha,"\n")
+    }
+    pv=1-pchisq(x02,df=n-1)
+    if(pv< alpha){
+      cat("\n")
+      cat("3. The P-value is", pv ,"which is smaller than alpha=",alpha,", so we reject H0 at significance level", alpha,"\n")
+    }else{
+      cat("\n")
+      cat("3. The P-value is", pv ,"which is not smaller than alpha=",alpha,", so we fail to reject H0 at significance level", alpha,"\n")
+    }
+  }else{
+    return("H1 should be two, left, or right")
+  }
+}
+
+
+Chi2test.power=function(H1="two",alpha=0.05,n,lambda)
+{
+  ########################################
+  # Check input
+  if(ceiling(n)-n!=0 |n<=2){return("n should be an integer >=3!")}
+  if(alpha>=1|alpha<=0){return("the significance level alpha should be between 0 and 1!")}
+  if(missing(lambda)!=TRUE){
+    if(lambda<=0){return("lambda should be positive!")}
+    if(H1=="two" & lambda==1){return("H1 deos not hold when lambda=1")}
+    if(H1=="left" & lambda>=1){return("H1 only holds when lambda<1")}
+    if(H1=="right" & lambda<=1){return("H1 only holds when lambda>1")}
+  }
+  ########################################
+  if(H1=="two")
+  {
+    cat("H1 is two-tailed", "\n")
+    if(missing(lambda)!=TRUE){
+      t_a1=Chi2.quantile(n-1,1-alpha/2)/lambda^2
+      t_a0=Chi2.quantile(n-1,alpha/2)/lambda^2
+      beta=pchisq(t_a1,df=n-1)-pchisq(t_a0,df=n-1)
+      cat("\n")
+      cat("The probability of the Type II error of this test at lambda=sigma1/sigma0=",lambda,"is",
+          beta, "and the associated power is",
+          1-beta)
+    }
+    par(mfrow=c(1,1))
+    par(mar=c(4,4,4,.5))
+    power=function(lambda){
+      t_a1=Chi2.quantile(n-1,1-alpha/2)/lambda^2
+      t_a0=Chi2.quantile(n-1,alpha/2)/lambda^2
+      beta=pchisq(t_a1,df=n-1)-pchisq(t_a0,df=n-1)
+      return(1-beta)
+    }
+    targ=function(lambda){
+      res=(power(lambda)-0.9995)
+      return(res)
+    }
+    a=uniroot(targ,c(1,100))$root
+    b=uniroot(targ,c(1e-6,1))$root
+    lambda=seq(1,a,length=100)
+    pp=sapply(lambda,power)
+    plot(lambda,pp,type="l",ylim=c(0,1),xlim=c(b,a),xlab=expression(lambda==sigma[1]/sigma[0]),ylab="Power",main=paste("Power curve of the two-tailed Chi.square test at n=",ceiling(n),sep=""))
+    lambda=seq(b,1,length=100)
+    pp=sapply(lambda,power)
+    lines(lambda,pp)
+    lines(seq(0,2*a,length=100),rep(alpha,100),lty=3)
+  }else if(H1=="left")
+  {
+    cat("H1 is left-tailed (<)","\n")
+    if(missing(lambda)!=TRUE){
+      t_a=Chi2.quantile(n-1,alpha)/lambda^2
+      beta=1-pchisq(Chi2.quantile(n-1,alpha)/lambda^2,df=n-1)
+      cat("\n")
+      cat("The probability of the Type II error of this test at lambda=sigma1/sigma0=",lambda,"is",
+          beta, "and the associated power is",
+          1-beta)
+    }
+    par(mfrow=c(1,1))
+    par(mar=c(4,4,4,.5))
+    power=function(lambda){
+      pchisq(Chi2.quantile(n-1,alpha)/lambda^2,df=n-1)
+      }
+    targ=function(lambda){
+      res=(power(lambda)-0.9995)
+      return(res)
+    }
+    b=uniroot(targ,c(1e-6,1))$root
+    lambda=seq(b,1,length=100)
+    pp=sapply(lambda,power)
+    plot(lambda,pp,type="l",ylim=c(0,1),xlab=expression(lambda==sigma[1]/sigma[0]),ylab="Power",main=paste("Power curve of the left-tailed (<) Chi.square test at n=",ceiling(n),sep=""))
+    lines(seq(0,1,length=100),rep(alpha,100),lty=3)
+  }else if(H1=="right")
+  {
+    cat("H1 is right-tailed (>)", "\n")
+    if(missing(lambda)!=TRUE){
+      t_a=Chi2.quantile(n-1,1-alpha)/lambda^2
+      beta=pchisq(t_a,df=n-1)
+      cat("\n")
+      cat("The probability of the Type II error of this test at lambda=sigma1/sigma0=",lambda,"is",
+          beta, "and the associated power is",
+          1-beta)
+    }
+    par(mfrow=c(1,1))
+    par(mar=c(4,4,4,.5))
+    power=function(lambda){
+      t_a=Chi2.quantile(n-1,1-alpha)/lambda^2
+      beta=pchisq(t_a,df=n-1)
+      return(1-beta)
+    }
+    targ=function(lambda){
+      res=(power(lambda)-0.9995)
+      return(res)
+    }
+    a=uniroot(targ,c(1,100))$root
+    lambda=seq(1,a,length=100)
+    pp=sapply(lambda,power)
+    plot(lambda,pp,type="l",ylim=c(0,1),xlim=c(1,a),xlab=expression(lambda==sigma[1]/sigma[0]),ylab="Power",main=paste("Power curve of the right-tailed (>) Chi.square test at n=",ceiling(n),sep=""))
+    lines(seq(0,2*a,length=100),rep(alpha,100),lty=3)
+  }else{
+    return("H1 should be two, left, or right.")
+  }
+}
+
+sample.size.Chi2test=function(H1="two",beta,lambda,alpha=0.05)
+{
+  if(alpha>=1|alpha<=0){return("The significance level alpha should be between 0 and 1!")}
+  if(beta>=1|beta<=alpha){return(cat("The specified Type II error should be of a probability beta between alpha=",alpha, "and 1!"))}
+  if(missing(lambda)==TRUE){
+    return("Please provide the value of lambda")
+  }
+  if(missing(lambda)!=TRUE){
+    if(lambda<=0){return("lambda should be positive!")}
+    if(H1=="two" & lambda==1){return("H1 deos not hold when lambda=1")}
+    if(H1=="left" & lambda>=1){return("H1 only holds when lambda<1")}
+    if(H1=="right" & lambda<=1){return("H1 only holds when lambda>1")}
+  }
+  if(H1=="two"){
+    pp=function(n){
+      t_a1=Chi2.quantile(n-1,1-alpha/2)/lambda^2
+      t_a0=Chi2.quantile(n-1,alpha/2)/lambda^2
+      beta=pchisq(t_a1,df=n-1)-pchisq(t_a0,df=n-1)
+      return(beta)
+    }
+    targ=function(n){return(pp(n)-beta)}
+    a=targ(2)
+    b=10
+    while(targ(b)*a>0)
+    {
+      b=2*b
+    }
+    n=ceiling(uniroot(targ, c(2,b) )$root)
+    cat("At significance level alpha=",alpha,", we need at least n=",n,"to achieve a power >=",1-beta, "of this test at lambda=sigma1/sigma0=",lambda,"\n")
+    cat("When n=",n-1,", the power is", 1-pp(n-1),"\n")
+    cat("When n=",n,", the power is", 1-pp(n),"\n")
+    cat("When n=",n+1,", the power is", 1-pp(n+1),"\n")
+  }else if(H1=="left"){
+    pp=function(n){
+      1-pchisq(Chi2.quantile(n-1,alpha)/lambda^2,df=n-1)
+    }
+    targ=function(n){return(pp(n)-beta)}
+    a=targ(2)
+    b=10
+    while(targ(b)*a>0)
+    {
+      b=2*b
+    }
+    n=ceiling(uniroot(targ, c(2,b) )$root)
+    cat("At significance level alpha=",alpha,", we need at least n=",n,"to achieve a power >=",1-beta, "of this test at lambda=sigma1/sigma0=",lambda,"\n")
+    cat("When n=",n-1,", the power is", 1-pp(n-1),"\n")
+    cat("When n=",n,", the power is", 1-pp(n),"\n")
+    cat("When n=",n+1,", the power is", 1-pp(n+1),"\n")
+  }else if(H1=="right"){
+    pp=function(n){
+      t_a=Chi2.quantile(n-1,1-alpha)/lambda^2
+      beta=pchisq(t_a,df=n-1)
+      return(beta)
+    }
+    targ=function(n){return(pp(n)-beta)}
+    a=targ(2)
+    b=10
+    while(targ(b)*a>0)
+    {
+      b=2*b
+    }
+    n=ceiling(uniroot(targ, c(2,b) )$root)
+    cat("At significance level alpha=",alpha,", we need at least n=",n,"to achieve a power >=",1-beta, "of this test at lambda=sigma1/sigma0=",lambda,"\n")
+    cat("When n=",n-1,", the power is", 1-pp(n-1),"\n")
+    cat("When n=",n,", the power is", 1-pp(n),"\n")
+    cat("When n=",n+1,", the power is", 1-pp(n+1),"\n")
+  }else{
+    return("H1 should be two, left, or right.")
+  }
+}
+
+Proptest=function(p0,H1="two",alpha=0.05,n,X)
+{
+  ########################################
+  # Check input
+  if(missing(p0)==TRUE){return("Please provide the hypothesized value p0 in the null hypothesis H0")}
+  if(p0<=0|p0>=1){return("p0 should be between 0 and 1!")}
+  if(alpha>=1|alpha<=0){return("the significance level alpha should be between 0 and 1!")}
+  if(missing(n)==TRUE | missing(X)==TRUE)
+  {
+    return("Please input the sample size/the value of X")
+  }
+  if(X<5 | n-X<5){cat("Warning: Because either X or n-X is less than 5. The CLT might not work well, and the following results should be used with caution ")}
+  ########################################
+  p=X/n
+  cat("The sample proportion is", p,"and sample size is", n,"\n","\n")
+  z0=(p-p0)/sqrt(p0*(1-p0)/n)
+  if(H1=="two")
+  {
+    z_a=qnorm(1-alpha/2)
+    cat("H1 is two-tailed: p does not equal to p0=",p0, ". The results are:","\n")
+    if(abs(z0)<=z_a){
+      cat("\n")
+      cat("1. Test statistic z0 is", z0,", z_(alpha/2) is", z_a,
+          ". Because |z0|<=z_(alpha/2), we fail to reject H0 at significance level", alpha,"\n")
+    }else{
+      cat("\n")
+      cat("1. Test statistic z0 is", z0,", z_(alpha/2) is", z_a,
+          ". Because |z0|>z_(alpha/2), we reject H0 at significance level", alpha,"\n")
+    }
+    Ln=p-z_a*sqrt(p*(1-p)/n)
+    Un=p+z_a*sqrt(p*(1-p)/n)
+    if(Ln<=p0 & p0<=Un){
+      cat("\n")
+      cat("2. A", (1-alpha)*100, "% two-tailed confidence interval for the population proportion is [", Ln,",",Un,"]","which contains the hypothesized value p0=", p0, ", so we fail to reject H0 at significance level", alpha,"\n")
+    }else{
+      cat("\n")
+      cat("2. A", (1-alpha)*100, "% two-tailed confidence interval for the population proportion is [", Ln,",",Un,"]","which does not contain the hypothesized value p0=", p0, ", we reject H0 at significance level", alpha,"\n")
+    }
+    pv=2*(1-pnorm(abs(z0)))
+    if(pv< alpha){
+      cat("\n")
+      cat("3. The P-value is", pv ,"which is smaller than alpha=",alpha,", so we reject H0 at significance level", alpha,"\n")
+    }else{
+      cat("\n")
+      cat("3. The P-value is", pv ,"which is not smaller than alpha=",alpha,", so we fail to reject H0 at significance level", alpha,"\n")
+    }
+  }else if(H1=="left")
+  {
+    z_a=qnorm(1-alpha)
+    cat("H1 is left-tailed: p is less than p0=",p0, ". The results are:","\n")
+    if(z0>= -z_a){
+      cat("\n")
+      cat("1. Test statistic z0 is", z0,", z_alpha is", z_a,
+          ". Because -z_alpha<=z0, we fail to reject H0 at significance level", alpha,"\n")
+    }else{
+      cat("\n")
+      cat("1. Test statistic z0 is", z0,", z_alpha is", z_a,
+          ". Because z0<-z_alpha, we reject H0 at significance level", alpha,"\n")
+    }
+    Un=p+z_a*sqrt(p*(1-p)/n)
+    if(p0<=Un){
+      cat("\n")
+      cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population mean is (", -Inf,",",Un,"]","which contains the hypothesized value p0=", p0, ", so we fail to reject H0 at significance level", alpha,"\n")
+    }else{
+      cat("\n")
+      cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population mean is (", -Inf,",",Un,"]","which does not contain the hypothesized value p0=", p0, ", we reject H0 at significance level", alpha,"\n")
+    }
+    pv=pnorm(z0)
+    if(pv< alpha){
+      cat("\n")
+      cat("3. The P-value is", pv ,"which is smaller than alpha=",alpha,", so we reject H0 at significance level", alpha,"\n")
+    }else{
+      cat("\n")
+      cat("3. The P-value is", pv ,"which is not smaller than alpha=",alpha,", so we fail to reject H0 at significance level", alpha,"\n")
+    }
+  }else if(H1=="right")
+  {
+    z_a=qnorm(1-alpha)
+    cat("H1 is right-tailed: p is more than p0=",p0, ". The results are:","\n")
+    if(z0<= z_a){
+      cat("\n")
+      cat("1. Test statistic z0 is", z0,", z_alpha is", z_a,
+          ". Because z0<= z_alpha, we fail to reject H0 at significance level", alpha,"\n")
+    }else{
+      cat("\n")
+      cat("1. Test statistic z0 is", z0,", z_alpha is", z_a,
+          ". Because z0>z_alpha, we reject H0 at significance level", alpha,"\n")
+    }
+    Ln=p-z_a*sqrt(p*(1-p)/n)
+    if(p0>=Ln){
+      cat("\n")
+      cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population mean is [", Ln,",",Inf,")","which contains the hypothesized value p0=", p0, ", so we fail to reject H0 at significance level", alpha,"\n")
+    }else{
+      cat("\n")
+      cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population mean is [", Ln,",",Inf,")","which does not contain the hypothesized value p0=", p0, ", we reject H0 at significance level", alpha,"\n")
+    }
+    pv=1-pnorm(z0)
+    if(pv< alpha){
+      cat("\n")
+      cat("3. The P-value is", pv ,"which is smaller than alpha=",alpha,", so we reject H0 at significance level", alpha,"\n")
+    }else{
+      cat("\n")
+      cat("3. The P-value is", pv ,"which is not smaller than alpha=",alpha,", so we fail to reject H0 at significance level", alpha,"\n")
+    }
+  }else{
+    return("H1 should be two, left, or right")
+  }
+}
+
+
+
+Proptest.power=function(H1="two",alpha=0.05,p0,p1,n)
+{
+  ########################################
+  # Check input
+  if(missing(p0)==TRUE)
+  {
+    return("Please provide hypothesized proportion p0")
+  }
+  if(missing(p1)==TRUE)
+  {
+    return("Please provide the value of p1")
+  }
+  if(p0>=1|p0<=0){return("the hypothesized proportion p0 should be between 0 and 1!")}
+  if(p1>=1|p1<=0){return("the chosen p1 should be between 0 and 1!")}
+  if(alpha>=1|alpha<=0){return("the significance level alpha should be between 0 and 1!")}
+  if(missing(n)==TRUE)
+  {
+    return("Please provide the sample size n")
+  }
+  if(H1=="two" & p1==p0){return("H1 does not holds when p1=p0")}
+  if(H1=="left" & p1>=p0){return("H1 only holds when p1<p0")}
+  if(H1=="right" & p1<=p0){return("H1 only holds when p1>p0")}
+  ########################################
+  if(H1=="two")
+  {
+    z_a=qnorm(1-alpha/2)
+    cat("H1 is two-tailed", "\n")
+    a=z_a*sqrt(p0*(1-p0)/n)
+    b=(p0-p1-a)/sqrt(p1*(1-p1)/n)
+    a=(p0-p1+a)/sqrt(p1*(1-p1)/n)
+    beta=pnorm(a)-pnorm(b)
+    cat("\n")
+    cat("The probability of the Type II error of this test at p1-p0=",p1-p0,"is",beta, "and the associated power is", 1-beta)
+    par(mfrow=c(1,1))
+    par(mar=c(4,4,4,.5))
+    power=function(delta){
+      pp=p0+delta
+      a=z_a*sqrt(p0*(1-p0)/n)
+      b=(p0-pp-a)/sqrt(pp*(1-pp)/n)
+      a=(p0-pp+a)/sqrt(pp*(1-pp)/n)
+      beta=pnorm(a)-pnorm(b)
+      return(1-beta)
+    }
+    targ=function(delta)(power(delta)-0.999)
+    aa=uniroot(targ,c(0,1-p0-1e-4))$root
+    bb=uniroot(targ,c(-p0+1e-4,0))$root
+    delta=seq(bb,aa,length=100)
+    pp=sapply(delta,power)
+    plot(delta,pp,type="l",ylim=c(0,1),xlab=expression(delta==p[1]-p[0]),ylab="Power",main=paste("Power curve of the two-tailed Proportion test at n=",ceiling(n), ", p0=",p0,sep=""))
+    lines(delta*2,rep(alpha,100),lty=3)
+  }else if(H1=="left")
+  {
+    z_a=qnorm(1-alpha)
+    cat("H1 is left-tailed", "\n")
+    a=z_a*sqrt(p0*(1-p0)/n)
+    b=(p0-p1-a)/sqrt(p1*(1-p1)/n)
+    beta=1-pnorm(b)
+    cat("\n")
+    cat("The probability of the Type II error of this test at p1-p0=",p1-p0,"is",beta, "and the associated power is", 1-beta)
+    par(mfrow=c(1,1))
+    par(mar=c(4,4,4,.5))
+    power=function(delta){
+      pp=p0+delta
+      a=z_a*sqrt(p0*(1-p0)/n)
+      b=(p0-pp-a)/sqrt(pp*(1-pp)/n)
+      beta=1-pnorm(b)
+      return(1-beta)
+    }
+    targ=function(delta)(power(delta)-0.999)
+    bb=uniroot(targ,c(-p0+1e-4,0))$root
+    delta=seq(bb,0,length=100)
+    pp=sapply(delta,power)
+    plot(delta,pp,type="l",ylim=c(0,1),xlab=expression(delta==p[1]-p[0]),ylab="Power",main=paste("Power curve of the left-tailed (<) Proportion test at n=",ceiling(n), ", p0=",p0,sep=""))
+    lines(delta*2,rep(alpha,100),lty=3)
+  }else if(H1=="right")
+  {
+  z_a=qnorm(1-alpha)
+  cat("H1 is right-tailed", "\n")
+  a=z_a*sqrt(p0*(1-p0)/n)
+  a=(p0-p1+a)/sqrt(p1*(1-p1)/n)
+  beta=pnorm(a)
+  cat("\n")
+  cat("The probability of the Type II error of this test at p1-p0=",p1-p0,"is",beta, "and the associated power is", 1-beta)
+  par(mfrow=c(1,1))
+  par(mar=c(4,4,4,.5))
+  power=function(delta){
+    pp=p0+delta
+    a=z_a*sqrt(p0*(1-p0)/n)
+    a=(p0-pp+a)/sqrt(pp*(1-pp)/n)
+    beta=pnorm(a)
+    return(1-beta)
+  }
+  targ=function(delta)(power(delta)-0.999)
+  aa=uniroot(targ,c(0,1-p0-1e-4))$root
+  delta=seq(0,aa,length=100)
+  pp=sapply(delta,power)
+  plot(delta,pp,type="l",ylim=c(0,1),xlab=expression(delta==p[1]-p[0]),ylab="Power",main=paste("Power curve of the right-tailed (>) Proportion test at n=",ceiling(n), ", p0=",p0,sep=""))
+  lines(seq(-1,aa,length=100),rep(alpha,100),lty=3)
+}else{
+  return("H1 should be two, left, or right.")
+}
+}
+
+
+
+sample.size.Proptest=function(H1="two",beta,alpha,p0,p1)
+{
+  if(missing(p0)==TRUE)
+  {
+    return("Please provide hypothesized proportion p0")
+  }
+  if(missing(p1)==TRUE)
+  {
+    return("Please provide the value of p1")
+  }
+  if(p0>=1|p0<=0){return("the hypothesized proportion p0 should be between 0 and 1!")}
+  if(p1>=1|p1<=0){return("the chosen p1 should be between 0 and 1!")}
+  if(alpha>=1|alpha<=0){return("the significance level alpha should be between 0 and 1!")}
+  if(beta>=1|beta<=alpha){return(cat("The specified Type II error should be of a probability beta between alpha=",alpha, "and 1!"))}
+  if(H1=="two" & p1==p0){return("H1 does not holds when p1=p0")}
+  if(H1=="left" & p1>=p0){return("H1 only holds when p1<p0")}
+  if(H1=="right" & p1<=p0){return("H1 only holds when p1>p0")}
+
+  if(H1=="two"){
+    pp=function(n){
+      z_a=qnorm(1-alpha/2)
+      aa=z_a*sqrt(p0*(1-p0))
+      bb=(sqrt(n)*(p0-p1)-aa)/sqrt(p1*(1-p1))
+      aa=(sqrt(n)*(p0-p1)+aa)/sqrt(p1*(1-p1))
+      return(pnorm(aa)-pnorm(bb))
+    }
+    targ=function(n){return(pp(n)-beta)}
+    a=targ(2)
+    b=10
+    while(targ(b)*a>0)
+    {
+      b=2*b
+    }
+    n=ceiling(uniroot(targ, c(2,b) )$root)
+    cat("At significance level alpha=",alpha,", we need at least n=",n,"to achieve a power >=",1-beta, "of this test at p1-p0=",p1-p0,"\n")
+    cat("When n=",n-1,", the power is", 1-pp(n-1),"\n")
+    cat("When n=",n,", the power is", 1-pp(n),"\n")
+    cat("When n=",n+1,", the power is", 1-pp(n+1),"\n")
+  }else if(H1=="left"){
+    pp=function(n){
+      z_a=qnorm(1-alpha)
+      aa=z_a*sqrt(p0*(1-p0))
+      bb=(sqrt(n)*(p0-p1)-aa)/sqrt(p1*(1-p1))
+      return(1-pnorm(bb))
+    }
+    targ=function(n){return(pp(n)-beta)}
+    a=targ(2)
+    b=10
+    while(targ(b)*a>0)
+    {
+      b=2*b
+    }
+    n=ceiling(uniroot(targ, c(2,b) )$root)
+    cat("At significance level alpha=",alpha,", we need at least n=",n,"to achieve a power >=",1-beta, "of this test at p1-p0=",p1-p0,"\n")
+    cat("When n=",n-1,", the power is", 1-pp(n-1),"\n")
+    cat("When n=",n,", the power is", 1-pp(n),"\n")
+    cat("When n=",n+1,", the power is", 1-pp(n+1),"\n")
+  }else if(H1=="right"){
+    pp=function(n){
+      z_a=qnorm(1-alpha/2)
+      aa=z_a*sqrt(p0*(1-p0))
+      aa=(sqrt(n)*(p0-p1)+aa)/sqrt(p1*(1-p1))
+      return(pnorm(aa))
+    }
+    targ=function(n){return(pp(n)-beta)}
+    a=targ(2)
+    b=10
+    while(targ(b)*a>0)
+    {
+      b=2*b
+    }
+    n=ceiling(uniroot(targ, c(2,b) )$root)
+    cat("At significance level alpha=",alpha,", we need at least n=",n,"to achieve a power >=",1-beta, "of this test at p1-p0=",p1-p0,"\n")
     cat("When n=",n-1,", the power is", 1-pp(n-1),"\n")
     cat("When n=",n,", the power is", 1-pp(n),"\n")
     cat("When n=",n+1,", the power is", 1-pp(n+1),"\n")

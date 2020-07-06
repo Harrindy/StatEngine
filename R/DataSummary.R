@@ -35,7 +35,7 @@ data.summary=function(x,plot=TRUE)
     plot(x,main="Scatterplot of x")
     boxplot(x,main="boxplot of x",ylab="x")
     hist(x)
-    qqPlot(x)
+    qqPlot(x,xlab="normal quantile",ylab="Observations")
     par(mfrow=c(1,1))
   }
 }
