@@ -38,7 +38,7 @@ Ztest=function(mu0,H1="two",alpha=0.05,sigma,
     cat("2. A", (1-alpha)*100, "% two-tailed confidence interval for the population mean is [", Ln,",",Un,"]","which contains the hypothesized value mu0=", mu0, ", so we fail to reject H0 at significance level", alpha,"\n")
   }else{
     cat("\n")
-    cat("2. A", (1-alpha)*100, "% two-tailed confidence interval for the population mean is [", Ln,",",Un,"]","which does not contain the hypothesized value mu0=", mu0, ", we reject H0 at significance level", alpha,"\n")
+    cat("2. A", (1-alpha)*100, "% two-tailed confidence interval for the population mean is [", Ln,",",Un,"]","which does not contain the hypothesized value mu0=", mu0, ", so we reject H0 at significance level", alpha,"\n")
   }
   pv=2*(1-pnorm(abs(z0)))
   if(pv< alpha){
@@ -67,7 +67,7 @@ Ztest=function(mu0,H1="two",alpha=0.05,sigma,
       cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population mean is (", -Inf,",",Un,"]","which contains the hypothesized value mu0=", mu0, ", so we fail to reject H0 at significance level", alpha,"\n")
     }else{
       cat("\n")
-      cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population mean is (", -Inf,",",Un,"]","which does not contain the hypothesized value mu0=", mu0, ", we reject H0 at significance level", alpha,"\n")
+      cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population mean is (", -Inf,",",Un,"]","which does not contain the hypothesized value mu0=", mu0, ", so we reject H0 at significance level", alpha,"\n")
     }
     pv=pnorm(z0)
     if(pv< alpha){
@@ -96,7 +96,7 @@ Ztest=function(mu0,H1="two",alpha=0.05,sigma,
       cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population mean is [", Ln,",",Inf,")","which contains the hypothesized value mu0=", mu0, ", so we fail to reject H0 at significance level", alpha,"\n")
     }else{
       cat("\n")
-      cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population mean is [", Ln,",",Inf,")","which does not contain the hypothesized value mu0=", mu0, ", we reject H0 at significance level", alpha,"\n")
+      cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population mean is [", Ln,",",Inf,")","which does not contain the hypothesized value mu0=", mu0, ", so we reject H0 at significance level", alpha,"\n")
     }
     pv=1-pnorm(z0)
     if(pv< alpha){
@@ -274,7 +274,7 @@ Ttest=function(mu0,H1="two",alpha=0.05,
       cat("2. A", (1-alpha)*100, "% two-tailed confidence interval for the population mean is [", Ln,",",Un,"]","which contains the hypothesized value mu0=", mu0, ", so we fail to reject H0 at significance level", alpha,"\n")
     }else{
       cat("\n")
-      cat("2. A", (1-alpha)*100, "% two-tailed confidence interval for the population mean is [", Ln,",",Un,"]","which does not contain the hypothesized value mu0=", mu0, ", we reject H0 at significance level", alpha,"\n")
+      cat("2. A", (1-alpha)*100, "% two-tailed confidence interval for the population mean is [", Ln,",",Un,"]","which does not contain the hypothesized value mu0=", mu0, ", so we reject H0 at significance level", alpha,"\n")
     }
     pv=2*(1-pt(abs(t0),df=n-1))
     if(pv< alpha){
@@ -303,7 +303,7 @@ Ttest=function(mu0,H1="two",alpha=0.05,
       cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population mean is (", -Inf,",",Un,"]","which contains the hypothesized value mu0=", mu0, ", so we fail to reject H0 at significance level", alpha,"\n")
     }else{
       cat("\n")
-      cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population mean is (", -Inf,",",Un,"]","which does not contain the hypothesized value mu0=", mu0, ", we reject H0 at significance level", alpha,"\n")
+      cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population mean is (", -Inf,",",Un,"]","which does not contain the hypothesized value mu0=", mu0, ", so we reject H0 at significance level", alpha,"\n")
     }
     pv=pt(t0,df=n-1)
     if(pv< alpha){
@@ -332,7 +332,7 @@ Ttest=function(mu0,H1="two",alpha=0.05,
       cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population mean is [", Ln,",",Inf,")","which contains the hypothesized value mu0=", mu0, ", so we fail to reject H0 at significance level", alpha,"\n")
     }else{
       cat("\n")
-      cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population mean is [", Ln,",",Inf,")","which does not contain the hypothesized value mu0=", mu0, ", we reject H0 at significance level", alpha,"\n")
+      cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population mean is [", Ln,",",Inf,")","which does not contain the hypothesized value mu0=", mu0, ", so we reject H0 at significance level", alpha,"\n")
     }
     pv=1-pt(t0,df=n-1)
     if(pv< alpha){
@@ -536,7 +536,7 @@ Chi2test=function(sigma0,H1="two",alpha=0.05,
       cat("2. A", (1-alpha)*100, "% two-tailed confidence interval for the population variance is [", Ln,",",Un,"]","which contains the hypothesized value sigma0^2=", sigma0^2, ", so we fail to reject H0 at significance level", alpha,"\n")
     }else{
       cat("\n")
-      cat("2. A", (1-alpha)*100, "% two-tailed confidence interval for the population variance is [", Ln,",",Un,"]","which does not contain the hypothesized value sigma0^2=", sigma0^2, ", we reject H0 at significance level", alpha,"\n")
+      cat("2. A", (1-alpha)*100, "% two-tailed confidence interval for the population variance is [", Ln,",",Un,"]","which does not contain the hypothesized value sigma0^2=", sigma0^2, ", so we reject H0 at significance level", alpha,"\n")
     }
     if(x02>=Chi2.quantile(n-1,.5)){pv=2*(1-pchisq(x02,df=n-1))}else{pv=2*(pchisq(x02,df=n-1))}
     if(pv< alpha){
@@ -565,7 +565,7 @@ Chi2test=function(sigma0,H1="two",alpha=0.05,
       cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population variance is (", -Inf,",",Un,"]","which contains the hypothesized value sigma0^2=", sigma0^2, ", so we fail to reject H0 at significance level", alpha,"\n")
     }else{
       cat("\n")
-      cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population variance is (", -Inf,",",Un,"]","which does not contain the hypothesized value sigma0^2=", sigma0^2, ", we reject H0 at significance level", alpha,"\n")
+      cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population variance is (", -Inf,",",Un,"]","which does not contain the hypothesized value sigma0^2=", sigma0^2, ", so we reject H0 at significance level", alpha,"\n")
     }
     pv=pchisq(x02,df=n-1)
     if(pv< alpha){
@@ -594,7 +594,7 @@ Chi2test=function(sigma0,H1="two",alpha=0.05,
       cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population variance is [", Ln,",",Inf,")","which contains the hypothesized value sigma0^2=", sigma0^2, ", so we fail to reject H0 at significance level", alpha,"\n")
     }else{
       cat("\n")
-      cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population variance is [", Ln,",",Inf,")","which does not contain the hypothesized value sigma0^2=", sigma0^2, ", we reject H0 at significance level", alpha,"\n")
+      cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population variance is [", Ln,",",Inf,")","which does not contain the hypothesized value sigma0^2=", sigma0^2, ", so we reject H0 at significance level", alpha,"\n")
     }
     pv=1-pchisq(x02,df=n-1)
     if(pv< alpha){
@@ -820,7 +820,7 @@ Proptest=function(p0,H1="two",alpha=0.05,n,X)
       cat("2. A", (1-alpha)*100, "% two-tailed confidence interval for the population proportion is [", Ln,",",Un,"]","which contains the hypothesized value p0=", p0, ", so we fail to reject H0 at significance level", alpha,"\n")
     }else{
       cat("\n")
-      cat("2. A", (1-alpha)*100, "% two-tailed confidence interval for the population proportion is [", Ln,",",Un,"]","which does not contain the hypothesized value p0=", p0, ", we reject H0 at significance level", alpha,"\n")
+      cat("2. A", (1-alpha)*100, "% two-tailed confidence interval for the population proportion is [", Ln,",",Un,"]","which does not contain the hypothesized value p0=", p0, ", so we reject H0 at significance level", alpha,"\n")
     }
     pv=2*(1-pnorm(abs(z0)))
     if(pv< alpha){
@@ -849,7 +849,7 @@ Proptest=function(p0,H1="two",alpha=0.05,n,X)
       cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population mean is (", -Inf,",",Un,"]","which contains the hypothesized value p0=", p0, ", so we fail to reject H0 at significance level", alpha,"\n")
     }else{
       cat("\n")
-      cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population mean is (", -Inf,",",Un,"]","which does not contain the hypothesized value p0=", p0, ", we reject H0 at significance level", alpha,"\n")
+      cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population mean is (", -Inf,",",Un,"]","which does not contain the hypothesized value p0=", p0, ", so we reject H0 at significance level", alpha,"\n")
     }
     pv=pnorm(z0)
     if(pv< alpha){
@@ -878,7 +878,7 @@ Proptest=function(p0,H1="two",alpha=0.05,n,X)
       cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population mean is [", Ln,",",Inf,")","which contains the hypothesized value p0=", p0, ", so we fail to reject H0 at significance level", alpha,"\n")
     }else{
       cat("\n")
-      cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population mean is [", Ln,",",Inf,")","which does not contain the hypothesized value p0=", p0, ", we reject H0 at significance level", alpha,"\n")
+      cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the population mean is [", Ln,",",Inf,")","which does not contain the hypothesized value p0=", p0, ", so we reject H0 at significance level", alpha,"\n")
     }
     pv=1-pnorm(z0)
     if(pv< alpha){
