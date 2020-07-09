@@ -339,8 +339,8 @@ Ftest=function(H1="two",alpha,sample1,sample2,n1,s1,n2,s2)
     }
     fL=qf(alpha/2,n2-1,n1-1)
     fU=qf(1-alpha/2,n2-1,n1-1)
-    Ln=r*fL
-    Un=r*fU
+    Ln=F0*fL
+    Un=F0*fU
     Delta0=1
     if(Ln<=Delta0 & Delta0<=Un){
       cat("\n")
@@ -373,7 +373,7 @@ Ftest=function(H1="two",alpha,sample1,sample2,n1,s1,n2,s2)
           ". Because F0<=f_(n1-1,n2-1,1-alpha), we reject H0 at significance level", alpha,"\n")
     }
     fU=qf(1-alpha,n2-1,n1-1)
-    Un=r*fU
+    Un=F0*fU
     Delta0=1
     if(Delta0<=Un){
       cat("\n")
@@ -405,7 +405,7 @@ Ftest=function(H1="two",alpha,sample1,sample2,n1,s1,n2,s2)
           ". Because F0>f_(n1-1,n2-1,alpha), we reject H0 at significance level", alpha,"\n")
     }
     fL=qf(alpha,n2-1,n1-1)
-    Ln=r*fL
+    Ln=F0*fL
     Delta0=1
     if(Ln<=Delta0){
       cat("\n")
