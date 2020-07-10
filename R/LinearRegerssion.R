@@ -11,7 +11,7 @@ lm.est=function(fit)
   return(data.frame(Estimate,row.names = name))
 }
 
-lm.coef.CI=function(fit,level=0.95)
+lm.coef.interval=function(fit,level=0.95)
 {
   p=length(fit$coefficients)
   name=c()
@@ -112,35 +112,24 @@ lm.partialFtest=function(fit.H0,fit.ALL,alpha=0.05,round=6)
   res=round(cbind(F0,f_alpha,P_value),digits=round)
   print(data.frame(cbind(res,Reject),row.names = "PartialFtest"))
 }
-# Example1=read.csv("https://raw.githubusercontent.com/Harrindy/StatEngine/master/Data/HydrocarbonPurity.csv")
-# x=Example1$HydrocarbonLevels
-# y=Example1$Purity
-# fit=lm(y~x)
-# lm.est(fit)
-# summary(fit)
-# lm.coef.CI(fit,level=0.95)
-# predict.lm(fit,new=data.frame(x=1),interval="confidence")
-# predict.lm(fit,new=data.frame(x=1),interval="prediction")
-#
-#
-Example2=read.csv("https://raw.githubusercontent.com/Harrindy/StatEngine/master/Data/WireBond.csv")
-head(Example2,2)
-y=Example2$PullStrength
-x1=Example2$WireLength
-x2=Example2$DieHeight
-fit=lm(y~x1+x2)
-summary(fit)
-lm.coef.CI(fit,level=0.95)
-lm.coef.test(fit,alpha=0.05,H1="two")
-predict.lm(fit,new=data.frame(x1=8,x2=275),interval="confidence")
-predict.lm(fit,new=data.frame(x1=8,x2=275),interval="prediction")
 
-x3=x1^2
-x4=x2^2
-lmH0=lm(y~x1+x2)
-lmALL=lm(y~x1+x2+x3+x4)
-lm.partialFtest(fit.H0=lmH0,fit.ALL=lmALL,alpha=0.05)
-summary(lm(y~x1+x2+x3))
-summary(lm(y~x1+x2+x4))
-summary(lm(y~x1+x2+x3+x4))
-
+lm.modelcheck=function(fit)
+{
+  require(car)
+  par(mfrow=c(1,3))
+  par(mar=c(4,4,2,.5))
+  e=fit$residuals
+  qqPlot(e,xlab="normal quantile",ylab="Observations",main="QQ-plot of ordinary residuals")
+  d=e/(sum(e^2)/fit$df.residual)
+  plot(d,ylim=c(min(-4,min(d)),max(4,max(d))),main="Standarized residuals")
+  lines(0:(length(d)+1),rep(3,length(d)+2),col="blue",lty=5,lwd=2)
+  lines(0:(length(d)+1),rep(-3,length(d)+2),col="blue",lty=5,lwd=2)
+  D=cooks.distance(fit)
+  plot(D,ylim=c(0,max(1,max(D))),main="Cook's Distances")
+  lines(0:(length(D)+1),rep(1,length(D)+2),col="blue",lty=5,lwd=2)
+  par(mfrow=c(1,1))
+  cat("VIFs are: \n")
+  v=vif(fit)
+  print(v)
+  #return(list(ordinary.residuals=e,standarized.residuals=d,Cook.distance=D,VIF=v))
+}
