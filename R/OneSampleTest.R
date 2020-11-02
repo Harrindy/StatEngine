@@ -461,8 +461,13 @@ sample.size.Ttest=function(H1="two",est.sigma,beta,delta,alpha=0.05)
       return(pt(t_a,df=n-1,ncp=abs(delta)*sqrt(n)/est.sigma)-pt(-t_a,df=n-1,ncp=abs(delta)*sqrt(n)/est.sigma))
     }
     targ=function(n){return(pp(n)-beta)}
-    z_a=normal.quantile(0,1,alpha/2)
-    n=ceiling(uniroot(targ, c(2,4*ceiling(((4-z_a)*est.sigma/delta)^2)) )$root)
+    a=targ(2)
+    b=10
+    while(targ(b)*a>0)
+    {
+      b=2*b
+    }
+    n=ceiling(uniroot(targ, c(2,b) )$root)
     cat("At significance level alpha=",alpha,", we need at least n=",n,"to achieve a power >=",1-beta, "of this test at delta=mu1-mu0=",delta,"\n")
     cat("When n=",n-1,", the power is", 1-pp(n-1),"\n")
     cat("When n=",n,", the power is", 1-pp(n),"\n")
@@ -472,9 +477,14 @@ sample.size.Ttest=function(H1="two",est.sigma,beta,delta,alpha=0.05)
       t_a=t.quantile(n-1,1-alpha/2)
       return(1-pt(-t_a,df=n-1,ncp=delta*sqrt(n)/est.sigma))
     }
-    z_a=normal.quantile(0,1,alpha/2)
     targ=function(n){return(pp(n)-beta)}
-    n=ceiling(uniroot(targ, c(2,4*ceiling(((4-z_a)*est.sigma/delta)^2)) )$root)
+    a=targ(2)
+    b=10
+    while(targ(b)*a>0)
+    {
+      b=2*b
+    }
+    n=ceiling(uniroot(targ, c(2,b) )$root)
     cat("At significance level alpha=",alpha,", we need at least n=",n,"to achieve a power >=",1-beta, "of this test at delta=mu1-mu0=",delta,"\n")
     cat("When n=",n-1,", the power is", 1-pp(n-1),"\n")
     cat("When n=",n,", the power is", 1-pp(n),"\n")
@@ -485,7 +495,13 @@ sample.size.Ttest=function(H1="two",est.sigma,beta,delta,alpha=0.05)
       return(pt(t_a,df=n-1,ncp=delta*sqrt(n)/est.sigma))
     }
     targ=function(n){return(pp(n)-beta)}
-    n=ceiling(uniroot(targ, c(2,4*ceiling(((4-z_a)*est.sigma/delta)^2)) )$root)
+    a=targ(2)
+    b=10
+    while(targ(b)*a>0)
+    {
+      b=2*b
+    }
+    n=ceiling(uniroot(targ, c(2,b) )$root)
     cat("At significance level alpha=",alpha,", we need at least n=",n,"to achieve a power >=",1-beta, "of this test at delta=mu1-mu0=",delta,"\n")
     cat("When n=",n-1,", the power is", 1-pp(n-1),"\n")
     cat("When n=",n,", the power is", 1-pp(n),"\n")
