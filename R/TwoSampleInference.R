@@ -535,7 +535,7 @@ twosample.Proptest=function(H1="two",alpha,n1,n2,X1,X2)
           ". Because z0>z_alpha, so we reject H0 at significance level", alpha,"\n")
     }
     Ln=p1-p2+z_a*s
-    if(Delta0>=Ln){
+    if(0>=Ln){
       cat("\n")
       cat("2. A", (1-alpha)*100, "% one-sided confidence interval for the difference in population proportions is [", Ln,",",Inf,")","which contains 0, so we fail to reject H0 at significance level", alpha,"\n")
     }else{
