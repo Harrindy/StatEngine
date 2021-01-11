@@ -1,6 +1,8 @@
 # StatEngine
 This package provides R tools for methods covered in the course STAT 509 "Statistics for Engineers" at the University of South Carolina.
 
+Prior to installation of this R package, you need to install R and Rstudio first.
+
 # Installation via GitHub
 
 You need to install the R package "devtools" first.
