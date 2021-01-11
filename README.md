@@ -29,7 +29,7 @@ Then install the R package car first.
     
 Now follow the general instruction below to install the StatEngine package from the downloaded file.
     
-       install.packages(path_to_file, repos = NULL, type="source")
+    install.packages(path_to_file, repos = NULL, type="source")
     
 Where path_to_file would represent the full path and file name:
 
