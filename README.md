@@ -33,7 +33,7 @@ Now follow the general instruction below to install the StatEngine package from 
     
 Where path_to_file would represent the full path and file name:
 
-On Windows it will look something like this: "C:\ \StatEngine_1.0.0.tar.gz".
+On Windows it will look something like this: "C:\\StatEngine_1.0.0.tar.gz".
 
 On UNIX it will look like this: "/home/blah/StatEngine_1.0.0.tar.gz".
 
