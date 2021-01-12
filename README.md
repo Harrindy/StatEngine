@@ -15,11 +15,16 @@ Then run these two lines to install the StatEngine package.
     install_github("Harrindy/StatEngine",force=TRUE) 
     #Press Enter if needed to finish the installation.
     
-If the installation is successful, load the package:
+Run this to check whether the installation is successful:
 
     library(StatEngine)
-    
-Now, you are ready to use this package.
+   
+This command loads the StatEngine Package. If you get 
+
+    Loading required package: car
+    Loading required package: carData   
+
+or no message at all, it means you are ready to use this package.
 
 # Installation from a local file
 
@@ -51,4 +56,14 @@ For example, I saved StatEngine_1.0.0.tar.gz in the Downloads folder of my Mac f
 
     install.packages("/Users/harrindy/Downloads/StatEngine_1.0.0.tar.gz", repos = NULL, type="source")
     
+Run this to check whether the installation is successful:
+
+    library(StatEngine)
+   
+This command loads the StatEngine Package. If you get 
+
+    Loading required package: car
+    Loading required package: carData   
+
+or no message at all, it means you are ready to use this package.
 
