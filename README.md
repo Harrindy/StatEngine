@@ -38,9 +38,17 @@ Where path_to_file would represent the full path and file name:
 On Windows it will look something like this: 
 
     "C:\\StatEngine_1.0.0.tar.gz"
+    
+For example, if you download StatEngine_1.0.0.tar.gz to your C drive (in no folder). Then you should try 
 
-On UNIX it will look like this: 
+    install.packages("C:\\StatEngine_1.0.0.tar.gz", repos = NULL, type="source")
+
+On UNIX/MAC it will look like this: 
 
     "/home/blah/StatEngine_1.0.0.tar.gz"
+    
+For example, I saved StatEngine_1.0.0.tar.gz in the Downloads folder of my Mac folder, I then use
+
+    install.packages("/Users/harrindy/Downloads/StatEngine_1.0.0.tar.gz", repos = NULL, type="source")
     
 
