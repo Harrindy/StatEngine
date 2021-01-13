@@ -24,7 +24,9 @@ This command loads the StatEngine Package. If you get
     Loading required package: car
     Loading required package: carData   
 
-or no message at all, it means you are ready to use this package.
+it means you did it!
+
+
 
 # Installation from a local file
 
@@ -44,7 +46,7 @@ On Windows it will look something like this:
 
     "C:\\StatEngine_1.0.0.tar.gz"
     
-For example, if you download StatEngine_1.0.0.tar.gz to your C drive (in no folder). Then you should try 
+For example, if you download StatEngine_1.0.0.tar.gz to your C drive (in no folder). Then you should use 
 
     install.packages("C:\\StatEngine_1.0.0.tar.gz", repos = NULL, type="source")
 
@@ -52,11 +54,11 @@ On UNIX/MAC it will look like this:
 
     "/home/blah/StatEngine_1.0.0.tar.gz"
     
-For example, I saved StatEngine_1.0.0.tar.gz in the Downloads folder of my Mac folder, I then use
+For example, I saved StatEngine_1.0.0.tar.gz in the Downloads folder of my Mac, I then use
 
     install.packages("/Users/harrindy/Downloads/StatEngine_1.0.0.tar.gz", repos = NULL, type="source")
     
-Run this to check whether the installation is successful:
+After installation, run this to check whether it is successful:
 
     library(StatEngine)
    
@@ -65,5 +67,5 @@ This command loads the StatEngine Package. If you get
     Loading required package: car
     Loading required package: carData   
 
-or no message at all, it means you are ready to use this package.
+it means you did it!
 
