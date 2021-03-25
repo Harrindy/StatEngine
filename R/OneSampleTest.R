@@ -202,7 +202,13 @@ sample.size.Ztest=function(H1="two",alpha,beta,sigma,delta)
       normal.prob(0,1,-z_a-delta*sqrt(n)/sigma,z_a-delta*sqrt(n)/sigma)
     }
     targ=function(n){return(pp(n)-beta)}
-    n=ceiling(uniroot(targ,c(1,4*ceiling(((4-z_a)*sigma/delta)^2)))$root)
+    a=targ(2)
+    b=10
+    while(targ(b)*a>0)
+    {
+      b=2*b
+    }
+    n=ceiling(uniroot(targ, c(2,b) )$root)
     cat("At significance level alpha=",alpha,", we need at least n=",n,"to achieve a power >=",1-beta, "of this test at delta=mu1-mu0=",delta,"\n")
     cat("When n=",n-1,", the power is", 1-pp(n-1),"\n")
     cat("When n=",n,", the power is", 1-pp(n),"\n")
